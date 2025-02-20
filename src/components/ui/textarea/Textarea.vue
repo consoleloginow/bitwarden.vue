@@ -1,24 +1,17 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from 'vue'
-import { cn } from '@/lib/utils'
-import { useVModel } from '@vueuse/core'
+const modelValue = defineModel<string>({ required: true })
 
-const props = defineProps<{
-  class?: HTMLAttributes['class']
-  defaultValue?: string | number
-  modelValue?: string | number
-}>()
-
-const emits = defineEmits<{
-  (e: 'update:modelValue', payload: string | number): void
-}>()
-
-const modelValue = useVModel(props, 'modelValue', emits, {
-  passive: true,
-  defaultValue: props.defaultValue,
-})
+// https://css-tricks.com/the-cleanest-trick-for-autogrowing-textareas/
 </script>
 
 <template>
-  <textarea v-model="modelValue" :class="cn('flex min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50', props.class)" />
+  <div
+    class="grid after:content-[attr(data-replicated-value)_'_'] after:col-span-full after:row-span-full after:px-4 after:py-2.5 after:invisible whitespace-pre-wrap"
+    :data-replicated-value="modelValue"
+  >
+    <textarea
+      v-model="modelValue"
+      class="col-span-full row-span-full w-full rounded-lg bg-white px-4 py-2.5 overflow-hidden resize-none focus-visible:outline-none"
+    />
+  </div>
 </template>

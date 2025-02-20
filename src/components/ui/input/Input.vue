@@ -27,14 +27,14 @@ const inputRef = useTemplateRef('input')
 </script>
 
 <template>
-  <div class="flex h-17 w-full items-center justify-between rounded-lg bg-white text-sm">
+  <div class="flex justify-between min-h-17 w-full items-center rounded-lg bg-white text-sm">
     <div class="grow relative h-full flex items-center pl-4" @click="inputRef?.focus()">
       <input
         :id="id"
         ref="input"
         v-model="modelValue"
         :type="type"
-        class="peer w-full pt-3.5 text-base scale-88 origin-left focus-visible:outline-none"
+        class="peer w-full pt-3.5 text-base origin-left focus-visible:outline-none"
         placeholder=" "
       >
       <label
@@ -42,7 +42,7 @@ const inputRef = useTemplateRef('input')
         :for="id"
       >{{ label }}</label>
     </div>
-    <div v-if="$slots.default" class="pl-2 pr-4 flex gap-4 text-slate-500" @click.stop>
+    <div class="pl-2 pr-4 flex gap-4 text-slate-500">
       <slot />
     </div>
   </div>
