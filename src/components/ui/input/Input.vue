@@ -1,24 +1,49 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from 'vue'
-import { cn } from '@/lib/utils'
-import { useVModel } from '@vueuse/core'
+import { useId, useTemplateRef } from 'vue'
 
-const props = defineProps<{
-  defaultValue?: string | number
-  modelValue?: string | number
-  class?: HTMLAttributes['class']
-}>()
+export interface InputProps {
+  modelValue: string
+  label: string
+  type?: 'text' | 'password' | 'url'
+}
 
-const emits = defineEmits<{
-  (e: 'update:modelValue', payload: string | number): void
-}>()
+export interface InputEmits {
+  'update:modelValue': (value: string) => void
+}
 
-const modelValue = useVModel(props, 'modelValue', emits, {
-  passive: true,
-  defaultValue: props.defaultValue,
+defineOptions({
+  inheritAttrs: false,
 })
+
+const {
+  label,
+  type = 'text',
+} = defineProps<InputProps>()
+
+const modelValue = defineModel<string>({ required: true })
+
+const id = useId()
+const inputRef = useTemplateRef('input')
 </script>
 
 <template>
-  <input v-model="modelValue" :class="cn('flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50', props.class)">
+  <div class="flex h-17 w-full items-center justify-between rounded-lg bg-white text-sm">
+    <div class="grow relative h-full flex items-center pl-4" @click="inputRef?.focus()">
+      <input
+        :id="id"
+        ref="input"
+        v-model="modelValue"
+        :type="type"
+        class="peer w-full pt-3.5 focus-visible:outline-none"
+        placeholder=" "
+      >
+      <label
+        class="absolute text-slate-500 peer-not-placeholder-shown:text-xs peer-focus:text-xs peer-not-placeholder-shown:top-4 peer-focus:top-4"
+        :for="id"
+      >{{ label }}</label>
+    </div>
+    <div v-if="$slots.default" class="pl-2 pr-4 flex gap-4 text-slate-500" @click.stop>
+      <slot />
+    </div>
+  </div>
 </template>
