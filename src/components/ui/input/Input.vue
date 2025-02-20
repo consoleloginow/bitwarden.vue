@@ -34,7 +34,7 @@ const inputRef = useTemplateRef('input')
         ref="input"
         v-model="modelValue"
         :type="type"
-        class="peer w-full pt-3.5 focus-visible:outline-none"
+        class="peer w-full pt-3.5 text-base scale-88 origin-left focus-visible:outline-none"
         placeholder=" "
       >
       <label
